@@ -10,7 +10,8 @@ int main ( void ) {
     double t1=0,t2=0,t3=0;
     double w=0; /* pomocná pro výpočet obsahu T */
     double obvod=0, obvod1=0, obsah=0, obsah1=0;
-    double max=0;
+    double prepona=0;
+    double odvesny=0;
     int i=1;
 
 i=1;
@@ -27,7 +28,6 @@ do
         {}
         else
         {
-            printf("%c\n",obrazec);
             printf ("Nespravny vstup.\n");
             return 1;
         }
@@ -51,7 +51,7 @@ do
                     printf ("Nespravny vstup.\n");
                     return 1;
                 }
-                if ( fabs (r1-r2) <= 1024*__DBL_EPSILON__*(r1-r2))
+                if ( fabs (r1-r2) <= 1024*__DBL_EPSILON__*(r1 + r2))
                 {
                     printf ("Nespravny vstup.\n");
                     return 1;
@@ -70,9 +70,21 @@ do
                 w = (t1+t2+t3)/2;
                 obsah = sqrt(w*(w-t1)*(w-t2)*(w-t3));
 
-                max = t1 > t2 ? t1 : t2;
-                max = t3 > max ? t3 : max;
-                if ((t1 + t2 + t3 - max) > max)
+                prepona = t1 > t2 ? t1 : t2;
+                prepona = t3 > prepona ? t3 : prepona;
+                odvesny = t1 + t2 + t3 - prepona;
+
+                /*
+                  1. odvesny >> prepona
+                  2. odvesny > prepona -> 0 < odvesny - prepona < e
+                   - nejde sestrojit, mozna se totiz rovnaji
+                  3. odvesny == prepona
+                  4. odvesny < prepona ->  -e < odvesny - prepona < 0
+                  5. odvesny << prepona
+
+                  */
+
+                if ((odvesny-prepona) > 1024*__DBL_EPSILON__*( odvesny + prepona))
                 {}
                 else
                 {
@@ -112,7 +124,7 @@ switch (obrazec1)
     break;
 }
 
-if ( fabs (obvod1-obvod) <=1024*__DBL_EPSILON__*(obvod1-obvod))
+if ( fabs (obvod1-obvod) <=1024*__DBL_EPSILON__*(obvod1 + obvod))
     {
         printf (" = ");
     }
@@ -171,7 +183,7 @@ switch (obrazec1)
     break;
 }
 
-if ( fabs (obsah1-obsah) <=1024*__DBL_EPSILON__*(obsah1-obsah))
+if ( fabs (obsah1-obsah) <=1024*__DBL_EPSILON__*(obsah1 + obsah))
     {
         printf (" = ");
     }
