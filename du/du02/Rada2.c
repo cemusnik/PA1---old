@@ -14,14 +14,18 @@ long long int power (int soustava, int rad)
 
 char prevod_cislice (int a)
 {
-    if (a < 10)
+    if (a >= 0 && a < 10)
     {
         return (a + 0x30);
     }
-
-    if (a > 9)
+    else if (a >= 10 && a < 36)
     {
         return (a + 87);
+    }
+    else
+    {
+        printf("Nespravne pouziti funkce prevod_cislice.\n");
+        return 0;
     }
 }
 
@@ -58,7 +62,7 @@ int main ( void ) {
 
     long long int cislice;
     int soustava;
-    int mezisoucet=0;
+    long long int mezisoucet=0;
     int rad=1;
 
     printf ("Pozice a soustava:\n");
