@@ -2,32 +2,39 @@
 
 char prevod_cislice (int a)
 {
-    if (a < 10)
+    if (a >= 0 && a < 10)
     {
         return (a + 0x30);
     }
-
-    if (a > 9)
+    else if (a >= 10 && a < 36)
     {
         return (a + 87);
     }
+    else
+    {
+        printf("Nespravne pouziti funkce prevod_cislice.\n");
+        return 0;
+    }
 }
-
-void prevodSoustav (long long int cislice, int soustava)
+void prevodSoustav (long long int cislo, int soustava)
 {
-    int x=0;
     int a=0;
     int ulozeno_znaku=0;
     const unsigned int cCISLO_KAPACITA = 100;
     int prevedene_cislo[cCISLO_KAPACITA];
 
-    x=cislice;
-    while (x != 0)
+    if(cislo == 0)
+    {
+        prevedene_cislo[0] = 0;
+        ulozeno_znaku = 1;
+    }
+
+    while (cislo != 0)
         {
-            a = x%soustava;
+            a = cislo%soustava;
             prevedene_cislo[ulozeno_znaku]=a;
-            x = x-a;
-            x = x/soustava;
+            cislo = cislo-a;
+            cislo = cislo/soustava;
             ulozeno_znaku++;
         }
     for (int i=ulozeno_znaku; i>0; i--)
@@ -59,6 +66,7 @@ int main(void)
         else if(scanf_retval != 2)
         {
             printf("Nespravny vstup\n");
+            scanf("%*[^\n]\n");
         }
         else
         {
