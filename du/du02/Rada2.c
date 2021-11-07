@@ -2,15 +2,14 @@
 #include <limits.h>
 #include <assert.h>
 
-int getNumber (long long int cislice, int soustava, int rad, int mezisoucet)
+long long int power (int soustava, int rad)
 {
-    int cislo=0;
-
-    poradi = cislice/rad;
-    poradi_v_radu = mezisoucet + poradi - 1;
-    printf ("%d", poradi_v_radu);
-    /* posílám z funkce poradi_v_radu */
-    
+    long long int nasobky_soustavy = 1;
+    for (int i=0; i<rad; i++)
+    {
+        nasobky_soustavy = nasobky_soustavy*soustava;
+    }
+    return nasobky_soustavy;
 }
 
 char prevod_cislice (int a)
@@ -26,21 +25,25 @@ char prevod_cislice (int a)
     }
 }
 
-void prevodSoustav (long long int cislice, int soustava)
+void prevodSoustav (long long int cislo, int soustava)
 {
-    int x=0;
     int a=0;
     int ulozeno_znaku=0;
     const unsigned int cCISLO_KAPACITA = 100;
     int prevedene_cislo[cCISLO_KAPACITA];
 
-    x=cislice;
-    while (x != 0)
+    if(cislo == 0)
+    {
+        prevedene_cislo[0] = 0;
+        ulozeno_znaku = 1;
+    }
+
+    while (cislo != 0)
         {
-            a = x%soustava;
+            a = cislo%soustava;
             prevedene_cislo[ulozeno_znaku]=a;
-            x = x-a;
-            x = x/soustava;
+            cislo = cislo-a;
+            cislo = cislo/soustava;
             ulozeno_znaku++;
         }
     for (int i=ulozeno_znaku; i>0; i--)
@@ -55,54 +58,80 @@ int main ( void ) {
 
     long long int cislice;
     int soustava;
-    int pocet_cifer=0;
     int mezisoucet=0;
+    int rad=1;
 
-    printf ("Pozice a soustava:");
-    if (scanf ("%lld %d", &cislice, &soustava) !=2
-        || cislice < 0
-        || soustava < 2
-        || soustava > 36)
+    printf ("Pozice a soustava:\n");
+    while(1)
+    {
+        int scanf_ret = scanf ("%lld %d", &cislice, &soustava);
+
+        if (scanf_ret == EOF)
+        {
+            break;
+        }
+        if (scanf_ret != 2)
         {
             printf ("Nespravny vstup.\n");
-            return 1;
+            scanf("%*[^\n]\n");
+            continue;
         }
-/*
-mám číslici 475
-1- přeskočím první řád soustavy - 10 čísel
-2. řád má soustava^2 - soustava (100-10 čísel) - přeskočím, protože 475 > 180+10
-3. řád soust^3 - soust^2 =
-    900*3=2700
-    285<2700, proto je číslice 475 dvojkové číslo -> číslo 194 (100+95-1), číslice 4
-*/
-while (cislice < XXXXX)
-    {
-        int rad=1;
-        int mezisoucet;
-        if (rad==1)
+        if(cislice < 0
+           || soustava < 2
+           || soustava > 36)
         {
-            soustavaX = pow (soustava, rad);
+            printf ("Nespravny vstup.\n");
+            continue;
         }
-        else soustavaX = rad * ( pow (soustava, rad) - pow (soustava, rad-1) );
-
-        if (cislice > soustavaX)
+        /*
+        mám číslici 485
+        1- přeskočím první řád soustavy - 10 čísel
+        2. řád má soustava^2 - soustava (100-10 čísel) - přeskočím, protože 475 > 180+10
+        3. řád soust^3 - soust^2 =
+            900*3=2700
+            285<2700, proto je číslice 475 dvojkové číslo -> číslo 195 (100+95), číslice 4
+        */
+        rad = 1;
+        mezisoucet = 0;
+        while (1)
         {
-            cislice = cislice-soustavaX
+            long long int soustava_cisla;
+            long long int soustava_cislice;
+
+            if (rad==1)
+            {
+                soustava_cisla = power (soustava, rad);
+                soustava_cislice = soustava_cisla;
+            }
+            else
+            {
+                soustava_cisla = power (soustava, rad) - power (soustava, rad-1);
+                soustava_cislice = rad * soustava_cisla;
+            }
+
+            if (cislice > soustava_cislice)
+            {
+                cislice = cislice-soustava_cislice;
+                mezisoucet += soustava_cisla;
+            }
+            else
+            {
+            /*pocet_cifer = rad;*/
+                long long int cislo = cislice/rad + mezisoucet; //našla jsem číslo
+                prevodSoustav(cislo, soustava);
+
+                //zjistím konkrétní číslici v čísle a označím ji ^
+                int vysl_modulo = cislice % rad;
+
+                for (int i=0; i<vysl_modulo; i++)
+                {
+                    printf (" ");
+                }
+                printf ("^\n");
+                break;
+            }
+            rad++;
         }
-        else
-        {
-           /*pocet_cifer = rad;*/
-           rad;
-
-           /* zjistila jsem, jakého řádu je číslice */
-          
-        /* zjistím číslo moji číslice v už známém řádu */
-
-        mezisoucet = mezisoucet + soustavaX //iniciace mezisoucet!, mezisoucet = 10 + 180
-        getNumber();
-
-        }
-        rad++;
     }
 
 
