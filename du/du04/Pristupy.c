@@ -16,12 +16,14 @@ int main (void) {
     int konec_intervalu;
     int vsechny_pristupy=0;
     int unikatni_pristupy=0;
+    int ret;
 
     printf("Pozadavky:\n");
 
     while (pocet_pristupu < MAX_POCET_PRISTUPU && flag != 666) //dodělej EOF !!!!!!!!!
     {
-        if ( scanf (" %c", &operace) == 1) //udělej pro operaci + kolikátá návštěva
+        ret = scanf (" %c", &operace);
+        if ( ret == 1) //udělej pro operaci + kolikátá návštěva
         {
             if (operace == '+')
             {
@@ -67,7 +69,7 @@ int main (void) {
                         pole_pocet_jednotlivych_pristupu[pole_jednotlive_pristupy[zacatek_intervalu]] += 1;
                         if (pole_pocet_jednotlivych_pristupu[pole_jednotlive_pristupy[zacatek_intervalu]] == 1)
                         {
-                            unikatni_pristupy += unikatni_pristupy +1;
+                            unikatni_pristupy = unikatni_pristupy +1;
                         }
                         else
                         {
@@ -75,6 +77,7 @@ int main (void) {
                         }
                     }
                     printf("%d / %d\n", unikatni_pristupy, vsechny_pristupy);
+                    unikatni_pristupy = 0;
                 }
             }
             else
@@ -82,6 +85,10 @@ int main (void) {
                 printf("Nespravny vstup.\n");
                 flag = 666;
             }
+        }
+        else if (ret == EOF)
+        {
+            flag = 666;
         }
         else
         {
